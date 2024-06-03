@@ -1,0 +1,5 @@
+recursive-include teleservices_location_salle *
+include MANIFEST.in
+include VERSION
+include README
+include LICENSE
