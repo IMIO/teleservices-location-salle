@@ -176,6 +176,41 @@
       <id type="str">1eafbc4e-a623-4cac-9f24-266f6eb59729</id>
     </field>
     <field>
+      <type>comment</type>
+      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %} {% with features=salle|get:"FeaturesValues" %}
+&lt;/p&gt;&lt;ul&gt;
+{% for feature in features %} {% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %} {% if feature|get:"DecimalValue" or feature|get:"TextValue" %}
+	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" %}{% endif %}{% endwith %}&lt;/li&gt;
+{% endif %} {% endif %} {% endfor %}
+&lt;/ul&gt;
+{% endwith %} {% endwith %}&lt;p&gt;&lt;/p&gt;</label>
+      <condition>
+        <type>django</type>
+        <value>form_var_salle</value>
+      </condition>
+      <display_locations />
+      <id type="str">a504c31d-5f2b-43b3-bf09-3b912bc00a97</id>
+    </field>
+    <field>
+      <type>comment</type>
+      <label type="str">&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;ul&gt;
+{% for response in webservice.imio_atal_photo_salle %}
+	&lt;li&gt;&lt;a href="{{ response|get:'url' }}" target="_blank" rel="noopener noreferrer nofollow"&gt;Photo {{ forloop.counter }}&lt;/a&gt;&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+</label>
+      <condition>
+        <type>django</type>
+        <value>form_var_salle</value>
+      </condition>
+      <display_locations />
+      <id type="str">2b503af8-b202-4dfa-ae8d-3042784fe8ed</id>
+    </field>
+    <field>
       <type>page</type>
       <label type="str">Choix de la salle</label>
       <condition>
@@ -205,6 +240,41 @@
       <image_desktop_size type="str">150</image_desktop_size>
       <image_mobile_size type="str">75</image_mobile_size>
       <id type="str">5c1557ce-b0ce-4e7b-abbd-0a29512109a3</id>
+    </field>
+    <field>
+      <type>comment</type>
+      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %} {% with features=salle|get:"FeaturesValues" %}
+&lt;/p&gt;&lt;ul&gt;
+{% for feature in features %} {% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %} {% if feature|get:"DecimalValue" or feature|get:"TextValue" %}
+	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" %}{% endif %}{% endwith %}&lt;/li&gt;
+{% endif %} {% endif %} {% endfor %}
+&lt;/ul&gt;
+{% endwith %} {% endwith %}&lt;p&gt;&lt;/p&gt;</label>
+      <condition>
+        <type>django</type>
+        <value>form_var_salle</value>
+      </condition>
+      <display_locations />
+      <id type="str">2a62caea-83eb-4ee0-b62f-98310ca18910</id>
+    </field>
+    <field>
+      <type>comment</type>
+      <label type="str">&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+
+&lt;ul&gt;
+{% for response in webservice.imio_atal_photo_salle %}
+	&lt;li&gt;&lt;a href="{{ response|get:'url' }}" target="_blank" rel="noopener noreferrer nofollow"&gt;Photo {{ forloop.counter }}&lt;/a&gt;&lt;/li&gt;
+{% endfor %}
+&lt;/ul&gt;
+
+&lt;p&gt;&amp;nbsp;&lt;/p&gt;
+</label>
+      <condition>
+        <type>django</type>
+        <value>form_var_salle</value>
+      </condition>
+      <display_locations />
+      <id type="str">d6a578b1-6ca3-48ec-a69f-9dc5412255c7</id>
     </field>
     <field>
       <type>page</type>

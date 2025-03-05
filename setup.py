@@ -17,7 +17,7 @@ class inst(install):
         os.system("sh " + path + "install_teleservices_location_salle.sh.sh")
 
 
-version = "0.0.1"
+version = "0.0.2"
 
 setup(
     name="teleservices-location-salle",

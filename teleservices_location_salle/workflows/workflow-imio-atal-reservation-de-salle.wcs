@@ -395,6 +395,49 @@
           <image_mobile_size type="str">75</image_mobile_size>
           <id type="str">1a74582e-15f6-40fd-a545-4f6908253acd</id>
         </field>
+        <field>
+          <type>bool</type>
+          <label type="str">Activer les salles parents enfants</label>
+          <required type="bool">False</required>
+          <varname type="str">activer_les_salles_parents_enfants</varname>
+          <display_locations>
+            <item>validation</item>
+            <item>summary</item>
+          </display_locations>
+          <anonymise type="str">no</anonymise>
+          <id type="str">e97bdf43-263a-4843-b8c7-c35c6a4c800a</id>
+        </field>
+        <field>
+          <type>items</type>
+          <label type="str">Informations inclues</label>
+          <required type="bool">False</required>
+          <varname type="str">informations_inclues</varname>
+          <display_locations />
+          <items>
+            <item>18249</item>
+            <item>18250</item>
+            <item>18254</item>
+            <item>18255</item>
+            <item>18259</item>
+            <item>18260</item>
+            <item>18261</item>
+            <item>18265</item>
+            <item>18262</item>
+            <item>18263</item>
+            <item>18264</item>
+          </items>
+          <display_mode type="str">checkboxes</display_mode>
+          <min_choices type="int">0</min_choices>
+          <max_choices type="int">0</max_choices>
+          <data_source>
+            <type>imio_atal_liste_features_salles</type>
+          </data_source>
+          <in_filters type="bool">False</in_filters>
+          <display_disabled_items type="bool">False</display_disabled_items>
+          <image_desktop_size type="str">150</image_desktop_size>
+          <image_mobile_size type="str">75</image_mobile_size>
+          <id type="str">dba4e029-6102-4a46-bc56-71ecf4c56e6e</id>
+        </field>
       </fields>
     </formdef>
   </variables>

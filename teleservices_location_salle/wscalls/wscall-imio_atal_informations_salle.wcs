@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<wscall id="167" url="https://staging-formulaires.guichet-citoyen.be/backoffice/settings/wscalls/167/">
+  <name>iMio - Atal - Informations salle</name>
+  <slug>imio_atal_informations_salle</slug>
+  <request>
+    <url>{{ passerelle_url }}passerelle-imio-ia-tech/{{ id_passerelle_ia_tech }}/get-room</url>
+    <request_signature_key />
+    <method>GET</method>
+    <timeout />
+    <cache_duration />
+    <qs_data>
+      <param key="expands">FeaturesValues</param>
+      <param key="room_id">{{ form_var_salle_id }}</param>
+    </qs_data>
+    <post_data />
+  </request>
+</wscall>
