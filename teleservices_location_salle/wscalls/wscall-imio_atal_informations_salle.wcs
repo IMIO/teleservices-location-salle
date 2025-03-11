@@ -10,7 +10,7 @@
     <cache_duration />
     <qs_data>
       <param key="expands">FeaturesValues</param>
-      <param key="room_id">{{ form_var_salle_id }}</param>
+      <param key="room_id">{% firstof form_var_salle_id form_var_salle_not_parent_id form_var_salle_enfant_0_id form_var_salle_parent_id %}</param>
     </qs_data>
     <post_data />
   </request>

@@ -157,6 +157,7 @@
       <type>item</type>
       <label type="str">Salles Disponibles</label>
       <required type="bool">True</required>
+      <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
       <varname type="str">salle</varname>
       <display_locations>
         <item>validation</item>
@@ -222,9 +223,13 @@
     <field>
       <type>item</type>
       <label type="str">Salle</label>
+      <condition>
+        <type>django</type>
+        <value>not form_option_activer_les_salles_parents_enfants</value>
+      </condition>
       <required type="bool">True</required>
       <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
-      <varname type="str">salle</varname>
+      <varname type="str">salle_not_parent</varname>
       <display_locations>
         <item>validation</item>
         <item>summary</item>
@@ -242,6 +247,58 @@
       <id type="str">5c1557ce-b0ce-4e7b-abbd-0a29512109a3</id>
     </field>
     <field>
+      <type>item</type>
+      <label type="str">Salle</label>
+      <condition>
+        <type>django</type>
+        <value>form_option_activer_les_salles_parents_enfants</value>
+      </condition>
+      <required type="bool">True</required>
+      <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
+      <varname type="str">salle_parent</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations>
+      <anonymise type="str">no</anonymise>
+      <display_mode type="str">list</display_mode>
+      <data_source>
+        <type>imio_atal_salles_parents</type>
+      </data_source>
+      <in_filters type="bool">False</in_filters>
+      <display_disabled_items type="bool">False</display_disabled_items>
+      <use_hint_as_first_option type="bool">True</use_hint_as_first_option>
+      <image_desktop_size type="str">150</image_desktop_size>
+      <image_mobile_size type="str">75</image_mobile_size>
+      <id type="str">35822df0-594b-4d8a-8672-46c6140a3d95</id>
+    </field>
+    <field>
+      <type>item</type>
+      <label type="str">Sous salle</label>
+      <condition>
+        <type>django</type>
+        <value>form_var_salle_parent_structured_id and data_source.imio_atal_salles_enfants</value>
+      </condition>
+      <required type="bool">False</required>
+      <hint type="str">&lt;p&gt;S&#233;lection optionnelle&lt;/p&gt;</hint>
+      <varname type="str">salle_enfant_0</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations>
+      <anonymise type="str">no</anonymise>
+      <display_mode type="str">list</display_mode>
+      <data_source>
+        <type>imio_atal_salles_enfants</type>
+      </data_source>
+      <in_filters type="bool">False</in_filters>
+      <display_disabled_items type="bool">False</display_disabled_items>
+      <use_hint_as_first_option type="bool">True</use_hint_as_first_option>
+      <image_desktop_size type="str">150</image_desktop_size>
+      <image_mobile_size type="str">75</image_mobile_size>
+      <id type="str">65eda6e5-b927-4353-a7c1-97789ff600a3</id>
+    </field>
+    <field>
       <type>comment</type>
       <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %} {% with features=salle|get:"FeaturesValues" %}
 &lt;/p&gt;&lt;ul&gt;
@@ -252,26 +309,22 @@
 {% endwith %} {% endwith %}&lt;p&gt;&lt;/p&gt;</label>
       <condition>
         <type>django</type>
-        <value>form_var_salle</value>
+        <value>form_var_salle_not_parent or form_var_salle_parent or form_var_salle_enfant_0</value>
       </condition>
       <display_locations />
       <id type="str">2a62caea-83eb-4ee0-b62f-98310ca18910</id>
     </field>
     <field>
       <type>comment</type>
-      <label type="str">&lt;p&gt;&amp;nbsp;&lt;/p&gt;
-
-&lt;ul&gt;
+      <label type="str">&lt;ul&gt;
 {% for response in webservice.imio_atal_photo_salle %}
-	&lt;li&gt;&lt;a href="{{ response|get:'url' }}" target="_blank" rel="noopener noreferrer nofollow"&gt;Photo {{ forloop.counter }}&lt;/a&gt;&lt;/li&gt;
+	&lt;li&gt;&lt;a href="{{ response|get:'url' }}" rel="noopener noreferrer nofollow" target="_blank"&gt;Photo {{ forloop.counter }}&lt;/a&gt;&lt;/li&gt;
 {% endfor %}
 &lt;/ul&gt;
-
-&lt;p&gt;&amp;nbsp;&lt;/p&gt;
 </label>
       <condition>
         <type>django</type>
-        <value>form_var_salle</value>
+        <value>form_var_salle_not_parent or form_var_salle_parent or form_var_salle_enfant_0</value>
       </condition>
       <display_locations />
       <id type="str">d6a578b1-6ca3-48ec-a69f-9dc5412255c7</id>
@@ -293,6 +346,14 @@
         </post_condition>
       </post_conditions>
       <id type="str">2c84cfda-5280-4ee1-87ed-bd7d134a105e</id>
+    </field>
+    <field>
+      <type>computed</type>
+      <label type="str">salle</label>
+      <varname type="str">salle</varname>
+      <value_template type="str">{% firstof form_var_salle_not_parent_structured form_var_salle_enfant_0_structured form_var_salle_parent_structured %}</value_template>
+      <freeze_on_initial_value type="bool">False</freeze_on_initial_value>
+      <id type="str">50844f2b-6f28-4089-bba9-75888d92be30</id>
     </field>
     <field>
       <type>items</type>
