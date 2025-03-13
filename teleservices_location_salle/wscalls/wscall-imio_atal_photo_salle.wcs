@@ -3,7 +3,7 @@
   <name>iMio - Atal - Photo Salle</name>
   <slug>imio_atal_photo_salle</slug>
   <request>
-    <url>{{ passerelle_url }}passerelle-imio-ia-tech/atal-demov6/get-attachments-list</url>
+    <url>{{ passerelle_url }}passerelle-imio-ia-tech/{{ id_passerelle_ia_tech }}/get-attachments-list</url>
     <request_signature_key />
     <method>GET</method>
     <timeout />
