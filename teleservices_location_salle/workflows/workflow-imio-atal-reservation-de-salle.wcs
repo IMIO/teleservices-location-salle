@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<workflow id="81" url="https://canary-formulaires.guichet-citoyen.be/backoffice/workflows/81/">
+<workflow id="81" url="">
   <name>iMio - Atal - R&#233;servation de salle</name>
   <slug>imio-atal-reservation-de-salle</slug>
   <category slug="imio-atal" category_id="7">iMio - Atal</category>
@@ -15,6 +15,15 @@
         <role>__restricted__</role>
       </visibility>
       <items>
+        <item type="jump" id="3">
+          <status>10</status>
+          <condition>
+            <type>django</type>
+            <value>not form_var_salle</value>
+          </condition>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
         <item type="set-backoffice-fields" id="1">
           <label>Is Hour</label>
           <fields>
@@ -30,7 +39,29 @@
         </item>
         <item type="jump" id="2">
           <status>2</status>
+          <condition>
+            <type>django</type>
+            <value>form_var_salle</value>
+          </condition>
           <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status>
+    <status>
+      <id>10</id>
+      <name>En attente de la compl&#233;tion du formulaire</name>
+      <colour>#ffff00</colour>
+      <visibility />
+      <items>
+        <item type="editable" id="1">
+          <by>
+            <item role_id="_submitter">_submitter</item>
+          </by>
+          <status>1</status>
+          <label>Compl&#233;ter le formulaire</label>
+          <operation_mode>partial</operation_mode>
+          <page_identifier>first_page</page_identifier>
           <set_marker_on_status>False</set_marker_on_status>
         </item>
       </items>
@@ -41,7 +72,7 @@
       <colour>#0080ff</colour>
       <visibility />
       <items>
-        <item type="jump" id="2">
+        <item type="jump" id="1">
           <status>3</status>
           <mode>immediate</mode>
           <set_marker_on_status>False</set_marker_on_status>
@@ -140,6 +171,15 @@
           </condition>
           <set_marker_on_status>False</set_marker_on_status>
         </item>
+        <item type="jump" id="4">
+          <status>11</status>
+          <condition>
+            <type>django</type>
+            <value>form_var_nom_de_l_evenement</value>
+          </condition>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
         <item type="jump" id="3">
           <status>6</status>
           <mode>immediate</mode>
@@ -166,12 +206,32 @@
       </items>
     </status>
     <status>
+      <id>11</id>
+      <name>Retour information Doc Event</name>
+      <colour>#c0bfbc</colour>
+      <visibility>
+        <role>__restricted__</role>
+      </visibility>
+      <items>
+        <item type="external_workflow_global_action" id="1">
+          <slug>formdef:demande-organisation-evenement</slug>
+          <trigger_id>action:info_location_salle</trigger_id>
+          <target_mode>all</target_mode>
+        </item>
+        <item type="jump" id="2">
+          <status>6</status>
+          <mode>immediate</mode>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+    </status>
+    <status>
       <id>6</id>
       <name>En attente de la decision</name>
       <colour>#FFFFFF</colour>
       <visibility />
       <items>
-        <item type="jump" id="4">
+        <item type="jump" id="1">
           <status>8</status>
           <condition>
             <type>django</type>
@@ -180,7 +240,7 @@
           <mode>immediate</mode>
           <set_marker_on_status>False</set_marker_on_status>
         </item>
-        <item type="jump" id="3">
+        <item type="jump" id="2">
           <status>4</status>
           <condition>
             <type>django</type>
@@ -189,7 +249,7 @@
           <mode>immediate</mode>
           <set_marker_on_status>False</set_marker_on_status>
         </item>
-        <item type="set-backoffice-fields" id="2">
+        <item type="set-backoffice-fields" id="3">
           <label>R&#233;cup&#233;ration des ID de locations</label>
           <fields>
             <field>
@@ -206,7 +266,7 @@
             <value>form_workflow_wscall_bookings_room_response_data</value>
           </condition>
         </item>
-        <item type="jump" id="1">
+        <item type="jump" id="4">
           <status>7</status>
           <mode>timeout</mode>
           <timeout>86400</timeout>
@@ -215,7 +275,7 @@
         <item type="choice" id="5">
           <label>Test Statut locations</label>
           <by>
-            <item slug="debug" role_id="6d2c55fe2ea44e41b7f8111b93f1930a">Debug</item>
+            <item slug="debug" role_id="df908b92acec4a68b3a11bbf516263d9">Debug</item>
           </by>
           <status>7</status>
           <require_confirmation>False</require_confirmation>
@@ -346,6 +406,25 @@
         </trigger>
       </triggers>
     </action>
+    <action>
+      <id>3</id>
+      <name>&#128679; Debug</name>
+      <items>
+        <item type="jump" id="1">
+          <status>11</status>
+          <set_marker_on_status>False</set_marker_on_status>
+        </item>
+      </items>
+      <triggers>
+        <trigger type="manual" id="d142dddb-b498-4b46-bbc0-b08f2fbbca0d">
+          <roles>
+            <item slug="debug" role_id="df908b92acec4a68b3a11bbf516263d9">Debug</item>
+          </roles>
+          <allow_as_mass_action>False</allow_as_mass_action>
+          <require_confirmation>False</require_confirmation>
+        </trigger>
+      </triggers>
+    </action>
   </global_actions>
   <variables>
     <formdef>
@@ -354,7 +433,7 @@
         <field>
           <type>string</type>
           <label type="str">min_days</label>
-          <required type="bool">True</required>
+          <required type="str">required</required>
           <varname type="str">min_days</varname>
           <display_locations>
             <item>validation</item>
@@ -366,7 +445,7 @@
         <field>
           <type>string</type>
           <label type="str">max_days</label>
-          <required type="bool">True</required>
+          <required type="str">required</required>
           <varname type="str">max_days</varname>
           <display_locations>
             <item>validation</item>
@@ -378,7 +457,7 @@
         <field>
           <type>item</type>
           <label type="str">S&#233;lection obligatoire par</label>
-          <required type="bool">False</required>
+          <required type="str">optional</required>
           <hint type="str">Aucun</hint>
           <varname type="str">selection_par</varname>
           <display_locations />
@@ -398,7 +477,7 @@
         <field>
           <type>bool</type>
           <label type="str">Activer les salles parents enfants</label>
-          <required type="bool">False</required>
+          <required type="str">optional</required>
           <varname type="str">activer_les_salles_parents_enfants</varname>
           <display_locations>
             <item>validation</item>
@@ -410,7 +489,7 @@
         <field>
           <type>items</type>
           <label type="str">Informations inclues</label>
-          <required type="bool">False</required>
+          <required type="str">optional</required>
           <varname type="str">informations_inclues</varname>
           <display_locations />
           <items>
@@ -448,7 +527,7 @@
         <field>
           <type>bool</type>
           <label type="str">Is Hour</label>
-          <required type="bool">False</required>
+          <required type="str">optional</required>
           <varname type="str">is_hour</varname>
           <display_locations>
             <item>summary</item>
@@ -459,7 +538,7 @@
         <field>
           <type>string</type>
           <label type="str">Location ID</label>
-          <required type="bool">True</required>
+          <required type="str">required</required>
           <varname type="str">location_id</varname>
           <display_locations>
             <item>validation</item>
@@ -471,7 +550,7 @@
         <field>
           <type>string</type>
           <label type="str">Satuts R&#233;servations</label>
-          <required type="bool">True</required>
+          <required type="str">required</required>
           <varname type="str">satuts_reservations</varname>
           <display_locations>
             <item>validation</item>

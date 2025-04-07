@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
-<formdef id="126" url="https://canary-formulaires.guichet-citoyen.be/backoffice/forms/126/">
+<formdef id="126" url="">
   <name>Location de salles</name>
   <url_name>demande-location-de-salles-atal</url_name>
+  <submission_user_association>any</submission_user_association>
+  <history_pane_default_mode>expanded</history_pane_default_mode>
   <discussion>false</discussion>
   <detailed_emails>true</detailed_emails>
   <disabled>false</disabled>
@@ -15,7 +17,47 @@
   <fields>
     <field>
       <type>page</type>
+      <label type="str">Identification de l'&#233;v&#233;nement</label>
+      <condition>
+        <type>django</type>
+        <value>False</value>
+      </condition>
+      <id type="str">0c69113b-319d-4f97-bb34-f8ee17af2570</id>
+    </field>
+    <field>
+      <type>string</type>
+      <label type="str">Nom de l'&#233;v&#233;nement</label>
+      <required type="str">required</required>
+      <varname type="str">nom_de_l_evenement</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations>
+      <anonymise type="str">final</anonymise>
+      <id type="str">dcff8f46-9152-4f97-a470-59d2dcc12090</id>
+    </field>
+    <field>
+      <type>email</type>
+      <label type="str">Adresse mail de l'organisateur</label>
+      <required type="str">required</required>
+      <varname type="str">mail</varname>
+      <display_locations>
+        <item>validation</item>
+        <item>summary</item>
+      </display_locations>
+      <prefill>
+        <locked>False</locked>
+        <locked-unless-empty>False</locked-unless-empty>
+        <type>user</type>
+        <value>_email</value>
+      </prefill>
+      <anonymise type="str">final</anonymise>
+      <id type="str">e715aeaf-e4ef-4d53-8b62-b5b9ce3cc1c1</id>
+    </field>
+    <field>
+      <type>page</type>
       <label type="str">Je choisi en premier</label>
+      <varname type="str">first_page</varname>
       <id type="str">ecdffa38-a554-4395-b409-b56ec697cb9e</id>
     </field>
     <field>
@@ -30,7 +72,7 @@
     <field>
       <type>item</type>
       <label type="str">Je choisi</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">date_or_salle</varname>
       <display_locations>
         <item>validation</item>
@@ -38,6 +80,7 @@
       </display_locations>
       <anonymise type="str">no</anonymise>
       <display_mode type="str">radio</display_mode>
+      <items />
       <data_source>
         <type>date_ou_salle</type>
       </data_source>
@@ -83,7 +126,7 @@
     <field>
       <type>date</type>
       <label type="str">Date de d&#233;but</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">date_debut</varname>
       <display_locations>
         <item>validation</item>
@@ -99,7 +142,7 @@
     <field>
       <type>string</type>
       <label type="str">Heure de d&#233;but</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">heure_debut</varname>
       <display_locations>
         <item>validation</item>
@@ -115,7 +158,7 @@
     <field>
       <type>date</type>
       <label type="str">Date de fin</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">date_fin</varname>
       <display_locations>
         <item>validation</item>
@@ -131,7 +174,7 @@
     <field>
       <type>string</type>
       <label type="str">heure de fin</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">heure_fin</varname>
       <display_locations>
         <item>validation</item>
@@ -156,7 +199,7 @@
     <field>
       <type>item</type>
       <label type="str">Salles Disponibles</label>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
       <varname type="str">salle</varname>
       <display_locations>
@@ -165,7 +208,6 @@
       </display_locations>
       <anonymise type="str">no</anonymise>
       <display_mode type="str">list</display_mode>
-      <items />
       <data_source>
         <type>salles_disponibles</type>
       </data_source>
@@ -178,13 +220,15 @@
     </field>
     <field>
       <type>comment</type>
-      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %} {% with features=salle|get:"FeaturesValues" %}
+      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %}{% with features=salle|get:"FeaturesValues" %}
+
 &lt;/p&gt;&lt;ul&gt;
-{% for feature in features %} {% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %} {% if feature|get:"DecimalValue" or feature|get:"TextValue" %}
-	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" %}{% endif %}{% endwith %}&lt;/li&gt;
-{% endif %} {% endif %} {% endfor %}
+{% for feature in features %}{% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %}{% if feature|get:"DecimalValue" or feature|get:"TextValue" or feature|get:"FeatureList" or feature|get:"FeatureLists" %}
+	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% elif feature|get:"FeatureLists" %}&lt;ul&gt;{% for value_list in feature|get:"FeatureLists" %}&lt;li&gt;{{ value_list|get:"Label" }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" feature|get:"FeatureList"|get:"Label" %}{% endif %}{% endwith %}&lt;/li&gt;
+{% endif %}{% endif %}{% endfor %}
 &lt;/ul&gt;
-{% endwith %} {% endwith %}&lt;p&gt;&lt;/p&gt;</label>
+
+{% endwith %}{% endwith %}&lt;p&gt;&lt;/p&gt;</label>
       <condition>
         <type>django</type>
         <value>form_var_salle</value>
@@ -227,7 +271,7 @@
         <type>django</type>
         <value>not form_option_activer_les_salles_parents_enfants</value>
       </condition>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
       <varname type="str">salle_not_parent</varname>
       <display_locations>
@@ -253,7 +297,7 @@
         <type>django</type>
         <value>form_option_activer_les_salles_parents_enfants</value>
       </condition>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <hint type="str">&lt;p&gt;S&#233;lectionnez une salle&lt;/p&gt;</hint>
       <varname type="str">salle_parent</varname>
       <display_locations>
@@ -279,7 +323,7 @@
         <type>django</type>
         <value>form_var_salle_parent_structured_id and data_source.imio_atal_salles_enfants</value>
       </condition>
-      <required type="bool">False</required>
+      <required type="str">optional</required>
       <hint type="str">&lt;p&gt;S&#233;lection optionnelle&lt;/p&gt;</hint>
       <varname type="str">salle_enfant_0</varname>
       <display_locations>
@@ -300,13 +344,15 @@
     </field>
     <field>
       <type>comment</type>
-      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %} {% with features=salle|get:"FeaturesValues" %}
+      <label type="str">&lt;p&gt;{% with salle=webservice.imio_atal_informations_salle %}{% with features=salle|get:"FeaturesValues" %}
+
 &lt;/p&gt;&lt;ul&gt;
-{% for feature in features %} {% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %} {% if feature|get:"DecimalValue" or feature|get:"TextValue" %}
-	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" %}{% endif %}{% endwith %}&lt;/li&gt;
-{% endif %} {% endif %} {% endfor %}
+{% for feature in features %}{% if feature|get:"Type"|stringformat:"i" in form_option_informations_inclues_raw %}{% if feature|get:"DecimalValue" or feature|get:"TextValue" or feature|get:"FeatureList" or feature|get:"FeatureLists" %}
+	&lt;li&gt;&lt;b&gt;{% with feature_details=form_option_informations_inclues_structured|get_feature_details:feature %}{{ feature_details|get:"text" }}&lt;/b&gt; : {% if feature_details|get:"FeatureValueType"|stringformat:"i" in id_boolean_features_location_salles|split:"," %}{{ feature|get:"DecimalValue"|yesno }}{% elif feature|get:"FeatureLists" %}&lt;ul&gt;{% for value_list in feature|get:"FeatureLists" %}&lt;li&gt;{{ value_list|get:"Label" }}&lt;/li&gt;{% endfor %}&lt;/ul&gt;{% else %}{% firstof feature|get:"DecimalValue"|decimal feature|get:"TextValue" feature|get:"FeatureList"|get:"Label" %}{% endif %}{% endwith %}&lt;/li&gt;
+{% endif %}{% endif %}{% endfor %}
 &lt;/ul&gt;
-{% endwith %} {% endwith %}&lt;p&gt;&lt;/p&gt;</label>
+
+{% endwith %}{% endwith %}&lt;p&gt;&lt;/p&gt;</label>
       <condition>
         <type>django</type>
         <value>form_var_salle_not_parent or form_var_salle_parent or form_var_salle_enfant_0</value>
@@ -358,7 +404,7 @@
     <field>
       <type>items</type>
       <label type="str">Jours</label>
-      <required type="bool">False</required>
+      <required type="str">optional</required>
       <varname type="str">jours_disponible</varname>
       <display_locations>
         <item>validation</item>
@@ -388,7 +434,7 @@
     <field>
       <type>items</type>
       <label type="str">Heures</label>
-      <required type="bool">False</required>
+      <required type="str">optional</required>
       <varname type="str">heures_disponible</varname>
       <display_locations>
         <item>validation</item>
@@ -396,6 +442,7 @@
       </display_locations>
       <extra_css_class type="str">hidden</extra_css_class>
       <anonymise type="str">final</anonymise>
+      <items />
       <display_mode type="str">checkboxes</display_mode>
       <min_choices type="int">0</min_choices>
       <max_choices type="int">0</max_choices>
@@ -415,7 +462,7 @@
         <type>django</type>
         <value>not form_option_selection_par</value>
       </condition>
-      <required type="bool">True</required>
+      <required type="str">required</required>
       <varname type="str">jour_heure</varname>
       <display_locations>
         <item>validation</item>
@@ -450,6 +497,123 @@
     </field>
   </fields>
   <options>
+    <option varname="activer_les_salles_parents_enfants" type="bool">false</option>
+    <option varname="informations_exclues" type="list">
+      <item>18249</item>
+      <item>18250</item>
+    </option>
+    <option varname="informations_exclues_display">18249, 18250</option>
+    <option varname="informations_exclues_structured" />
+    <option varname="informations_inclues" type="list">
+      <item>1975</item>
+      <item>1976</item>
+      <item>2229</item>
+      <item>2230</item>
+      <item>4181</item>
+      <item>4182</item>
+      <item>4183</item>
+    </option>
+    <option varname="informations_inclues_display">Acte, Prix acquisition, Accueil Public, Lien Plan, test, test 1, Liste multi</option>
+    <option varname="informations_inclues_structured" type="list">
+      <item type="dict">
+        <FeatureCategoryId type="int">1035</FeatureCategoryId>
+        <FeatureValueType type="int">2</FeatureValueType>
+        <Label>Acte</Label>
+        <Order type="int">1</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">1975</Id>
+        <id type="int">1975</id>
+        <text>Acte</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1035</FeatureCategoryId>
+        <FeatureValueType type="int">2</FeatureValueType>
+        <Label>Prix acquisition</Label>
+        <Order type="int">2</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">1976</Id>
+        <id type="int">1976</id>
+        <text>Prix acquisition</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1052</FeatureCategoryId>
+        <FeatureValueType type="int">5</FeatureValueType>
+        <Label>Accueil Public</Label>
+        <Order type="int">1</Order>
+        <Required type="bool">true</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">2229</Id>
+        <id type="int">2229</id>
+        <text>Accueil Public</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1052</FeatureCategoryId>
+        <FeatureValueType type="int">9</FeatureValueType>
+        <Label>Lien Plan</Label>
+        <Order type="int">2</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">2230</Id>
+        <id type="int">2230</id>
+        <text>Lien Plan</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1052</FeatureCategoryId>
+        <FeatureValueType type="int">3</FeatureValueType>
+        <Label>test</Label>
+        <Order type="int">3</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">4181</Id>
+        <id type="int">4181</id>
+        <text>test</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1052</FeatureCategoryId>
+        <FeatureValueType type="int">3</FeatureValueType>
+        <Label>test 1</Label>
+        <Order type="int">4</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">4182</Id>
+        <id type="int">4182</id>
+        <text>test 1</text>
+      </item>
+      <item type="dict">
+        <FeatureCategoryId type="int">1052</FeatureCategoryId>
+        <FeatureValueType type="int">24</FeatureValueType>
+        <Label>Liste multi</Label>
+        <Order type="int">5</Order>
+        <Required type="bool">false</Required>
+        <Editable type="bool">true</Editable>
+        <History type="bool">false</History>
+        <Active type="bool">true</Active>
+        <ValueList type="list" />
+        <Id type="int">4183</Id>
+        <id type="int">4183</id>
+        <text>Liste multi</text>
+      </item>
+    </option>
     <option varname="max_days">45</option>
     <option varname="min_days">5</option>
     <option varname="selection_par" />
